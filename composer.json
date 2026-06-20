@@ -11,20 +11,25 @@
         }
     ],
     "homepage": "https://github.com/pablouser1/ProxiTok",
-	"config": {
-		"optimize-autoloader": true,
-		"platform": {
-			"php": "8.1"
-		}
-	},
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/darlopvil/TikScraperPHP" }
+    ],
+    "config": {
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "8.1"
+        }
+    },
     "require": {
         "php": "^8.1",
         "ext-mbstring": "*",
         "latte/latte": "^3.0",
         "bramus/router": "^1.6",
-        "pablouser1/tikscraper": "^2.6",
+        "pablouser1/tikscraper": "dev-master",
         "josegonzalez/dotenv": "^4.0"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "suggest": {
         "ext-redis": "For using redis as a caching engine"
     },

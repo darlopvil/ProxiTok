@@ -1,6 +1,6 @@
 {if !isset($item->imagePost)}
 <video controls n:attr="autoplay => $isAutoplay" poster="{url_stream($item->video->originCover)}" preload="none">
-	<source src="{url_stream($item->video->playAddr)}" type="video/mp4" />
+	<source src="{url_video_stream($item->author->uniqueId, $item->id)}" type="video/mp4" />
 </video>
 {else}
 {if isset($isSimple)}

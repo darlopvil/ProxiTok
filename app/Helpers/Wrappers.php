@@ -90,6 +90,12 @@ class Wrappers {
         $latte->addFunction('url_video_stream', function (string $username, string $id): string {
             return UrlBuilder::video_stream($username, $id);
         });
+        $latte->addFunction('url_music', function (object $item): string {
+            if (isset($item->music->playUrl) && $item->music->playUrl !== '') {
+                return UrlBuilder::stream($item->music->playUrl);
+            }
+            return UrlBuilder::audio_stream($item->author->uniqueId ?? '', (string) $item->id);
+        });
         $latte->addFunction('url_video_download', function (string $username, string $id, bool $watermark = false): string {
             return UrlBuilder::video_download($username, $id, $watermark);
         });

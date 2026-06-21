@@ -47,6 +47,10 @@ class ProxyController {
         self::proxySidecar('/video');
     }
 
+    static public function audioStream(): void {
+        self::proxySidecar('/audio');
+    }
+
     public static function videoDownload() {
         $extra = isset($_GET['watermark']) ? '&watermark=1' : '';
         self::proxySidecar('/download', $extra);

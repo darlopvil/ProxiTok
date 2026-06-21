@@ -24,7 +24,7 @@
 			{include './common/tags.latte', challenges: $item->challenges}
 			{/if}
 			<p class="mb-2 mt-2" n:ifcontent>{render_desc($item->desc, $item->textExtra ?? [])|noescape}</p>
-      {include './common/audio.latte', songTitle: $item->music->title, url: $item->music->playUrl}
+      {include './common/audio.latte', songTitle: $item->music->title, src: url_music($item)}
 			{include './common/stats.latte', playCount: $item->stats->playCount, diggCount: $item->stats->diggCount, commentCount: $item->stats->commentCount, shareCount: $item->stats->shareCount}
 			<div class="has-text-centered">
 				{include './common/content.latte', item: $item, isAutoplay: false, isBig: false}

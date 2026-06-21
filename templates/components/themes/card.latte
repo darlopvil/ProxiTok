@@ -12,7 +12,7 @@
 			data-desc="{$item->desc}"
 			data-createtime="{$item->createTime}"
       data-music_title="{$item->music->title}"
-      data-music_url="{url_stream($item->music->playUrl)}">
+      data-music_url="{url_music($item)}">
       <img loading="lazy" src="{url_stream($item->video->originCover)}" />
 			<img class="hidden" loading="lazy" data-src="{url_stream($item->video->dynamicCover)}" />
     </div>

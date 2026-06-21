@@ -17,6 +17,10 @@ class UrlBuilder {
         return Misc::url('/video?id=' . urlencode($id) . '&user=' . urlencode($username));
     }
 
+    public static function audio_stream(string $username, string $id): string {
+        return Misc::url('/audio?id=' . urlencode($id) . '&user=' . urlencode($username));
+    }
+
     // Descarga de vídeo vía sidecar yt-dlp
     public static function video_download(string $username, string $id, bool $watermark): string {
         $u = Misc::url('/dl?id=' . urlencode($id) . '&user=' . urlencode($username));

@@ -55,6 +55,7 @@ $router->get('/stream', 'ProxyController@stream');
 $router->get('/download', 'ProxyController@download');
 $router->get('/video', 'ProxyController@videoStream');
 $router->get('/dl', 'ProxyController@videoDownload');
+$router->get('/audio', 'ProxyController@audioStream');
 $router->get('/redirect/search', 'RedirectController@search');
 $router->get('/redirect/download', 'RedirectController@download');
 

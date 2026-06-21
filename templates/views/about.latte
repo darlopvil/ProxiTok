@@ -1,40 +1,43 @@
 {layout '../layouts/default.latte'}
 
 {block header}
-	<p class="title">Welcome to ProxiTok!</p>
+	<p class="title">ProxiTok · darlopvil-hub</p>
 	<p class="subtitle">
-    Made with <span style="color: #e25555;">&#9829;</span> in <a href="https://github.com/pablouser1/ProxiTok">Github</a>
+		Hecho con <span style="color: #e25555;">&#9829;</span> · fork de
+		<a href="https://github.com/darlopvil/ProxiTok">darlopvil</a>,
+		basado en el <a href="https://github.com/pablouser1/ProxiTok">ProxiTok original de pablouser1</a>
 	</p>
 {/block}
 
 {block content}
 	<div class="content">
-		<p class="title">About this instance</p>
-		<p>Frontend version: <b>{version_frontend()}</b></p>
-		<p>Scraper version: <b>{version_scraper()}</b></p>
+		<p class="title">Sobre esta instancia</p>
+		<p>Versión del frontend: <b>{version_frontend()}</b> <small>(fork darlopvil)</small></p>
+		<p>Versión del scraper: <b>{version_scraper()}</b> <small>(TikScraperPHP, fork darlopvil)</small></p>
+		<p>Instancia privada self-hosted. Navegación (FYP, perfiles, tags, búsqueda) con firma propia vía carcabot; reproducción y descarga de vídeo (con y sin marca de agua), listado de perfiles y audio original vía sidecar yt-dlp.</p>
 	</div>
 	<div class="content">
-		<p class="title">Why would I want to use ProxiTok?</p>
+		<p class="title">¿Por qué usar ProxiTok?</p>
 		<p>
-			There are already
-			<a rel="nofollow" href="https://penetrum.com/tiktok/Penetrum_TikTok_Security_Analysis_whitepaper.pdf">multiple</a>
-			<a rel="nofollow" href="https://rufposten.de/blog/2019/12/05/privacy-analysis-of-tiktoks-app-and-website">articles</a>
-			<a rel="nofollow" href="https://citizenlab.ca/2021/03/tiktok-vs-douyin-security-privacy-analysis">explaining</a>
-			Tiktok's privacy issues.
-			This program allows you to browse TikTok without having to worry about privacy concerns.
+			Existen
+			<a rel="nofollow" href="https://penetrum.com/tiktok/Penetrum_TikTok_Security_Analysis_whitepaper.pdf">múltiples</a>
+			<a rel="nofollow" href="https://rufposten.de/blog/2019/12/05/privacy-analysis-of-tiktoks-app-and-website">artículos</a>
+			<a rel="nofollow" href="https://citizenlab.ca/2021/03/tiktok-vs-douyin-security-privacy-analysis">explicando</a>
+			los problemas de privacidad de TikTok. ProxiTok te deja navegar TikTok sin exponer tu IP ni tus datos: el servidor hace de intermediario y solo él habla con TikTok.
 		</p>
 	</div>
 	<div class="content">
-		<p class="title">Third party</p>
-		<p>
-			This project wouldn't be possible without the help of the following projects:
-			<ul>
-				<li><a rel="nofollow" href="https://github.com/pablouser1/TikScraperPHP">TikScraperPHP</a></li>
-				<li><a rel="nofollow" href="https://github.com/nette/latte">Latte</a></li>
-				<li><a rel="nofollow" href="https://github.com/bramus/router">bramus/router</a></li>
-				<li><a rel="nofollow" href="https://github.com/josegonzalez/php-dotenv">php-dotenv</a></li>
-				<li><a rel="nofollow" href="https://github.com/jgthms/bulma">Bulma</a> and <a href="https://github.com/jenil/bulmaswatch">Bulmaswatch</a></li>
-			</ul>
-		</p>
+		<p class="title">Terceros</p>
+		<p>Este proyecto no sería posible sin estos otros:</p>
+		<ul>
+			<li>Base original: <a rel="nofollow" href="https://github.com/pablouser1/ProxiTok">ProxiTok</a> y <a rel="nofollow" href="https://github.com/pablouser1/TikScraperPHP">TikScraperPHP</a> de pablouser1</li>
+			<li><a rel="nofollow" href="https://github.com/darlopvil/TikScraperPHP">TikScraperPHP (fork darlopvil)</a> — capa de scraping/firma reescrita</li>
+			<li><a rel="nofollow" href="https://github.com/carcabot/tiktok-signature">tiktok-signature (carcabot)</a> — firma web X-Bogus + X-Gnarly</li>
+			<li><a rel="nofollow" href="https://github.com/darlopvil/ttdlp">ttdlp</a> — sidecar de vídeo/audio basado en <a rel="nofollow" href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a></li>
+			<li><a rel="nofollow" href="https://github.com/nette/latte">Latte</a></li>
+			<li><a rel="nofollow" href="https://github.com/bramus/router">bramus/router</a></li>
+			<li><a rel="nofollow" href="https://github.com/josegonzalez/php-dotenv">php-dotenv</a></li>
+			<li><a rel="nofollow" href="https://github.com/jgthms/bulma">Bulma</a> y <a href="https://github.com/jenil/bulmaswatch">Bulmaswatch</a></li>
+		</ul>
 	</div>
 {/block}

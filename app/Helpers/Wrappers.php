@@ -103,25 +103,24 @@ class Wrappers {
 
         // Add URLs to video descriptions
         $latte->addFunction('render_desc', function (string $desc, array $textExtras = []): string {
-            $sanitizedDesc = htmlspecialchars($desc);
-            $out = $sanitizedDesc;
+            $out = htmlspecialchars($desc);
             foreach ($textExtras as $extra) {
-                $url = '';
-                // We do -1 to also take the # or @
-                $text = mb_substr($desc, $extra->start - 1, $extra->end - $extra->start, 'UTF-8');
-                switch ($extra->type) {
-                    // User URL
-                    case TextExtras::USER:
-                        $url = UrlBuilder::user(htmlspecialchars($extra->userUniqueId));
-                        break;
-                    // Hashtag URL
-                    case TextExtras::HASHTAG:
-                        $url = UrlBuilder::tag(htmlspecialchars($extra->hashtagName));
-                        break;
+                $token = null;
+                $url   = '';
+                if (isset($extra->hashtagName) && $extra->hashtagName !== '') {
+                    $token = '#' . $extra->hashtagName;
+                    $url   = UrlBuilder::tag($extra->hashtagName);
+                } elseif (isset($extra->userUniqueId) && $extra->userUniqueId !== '') {
+                    $token = '@' . $extra->userUniqueId;
+                    $url   = UrlBuilder::user($extra->userUniqueId);
                 }
+                if ($token === null) continue;
 
-                // We do \b to avoid non-strict matches ('#hi' would match with '#hii' and we don't want that)
-                $out = preg_replace("/$text\b/", "<a href=\"$url\">$text</a>", $out);
+                // Token literal, insensible a mayúsculas, UNA sola vez, sin offsets UTF-16.
+                $pattern = '/' . preg_quote(htmlspecialchars($token), '/') . '\b/iu';
+                $out = preg_replace_callback($pattern, function ($m) use ($url) {
+                    return '<a href="' . $url . '">' . $m[0] . '</a>';
+                }, $out, 1);
             }
             return $out;
         });

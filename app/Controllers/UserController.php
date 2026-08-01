@@ -20,7 +20,7 @@ class UserController {
             $feed = $user->getFeed();
             Wrappers::latte('user', new FullTemplate($info->detail->nickname, $info, $feed));
         } else {
-            ErrorHandler::showMeta($user->error());
+            ErrorHandler::showMeta($user->error(), 'user');
         }
     }
 
@@ -33,7 +33,7 @@ class UserController {
             $info = $video->getInfo();
             Wrappers::latte('video', new VideoTemplate($item, $info));
         } else {
-            ErrorHandler::showMeta($video->error());
+            ErrorHandler::showMeta($video->error(), 'video');
         }
     }
 

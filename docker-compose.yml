@@ -1,64 +1,38 @@
 services:
-  web:
-    container_name: proxitok-web
-    image: ghcr.io/pablouser1/proxitok:master
-    ports:
-      - 8080:8080
+  proxitok_app:
+    build: .
+    container_name: proxitok_app
+    restart: unless-stopped
     environment:
+      - APP_URL=https://proxitok.darlopvil-hub.online
       - LATTE_CACHE=/cache
       - API_CACHE=redis
-      - REDIS_HOST=proxitok-redis
+      - REDIS_HOST=proxitok_redis
       - REDIS_PORT=6379
-      - API_CHROMEDRIVER=http://proxitok-chromedriver:9515
-      # - API_VERIFYFP=verify_...
-      # - API_DEVICE_ID=4586...
-    labels:
-      - "io.containers.autoupdate=registry"
+      # carcabot (firmador) vive en el stack ~/tiktok-signer, red compartida:
+      - API_CHROMEDRIVER=http://tiktok-signer_app:8080
+      - API_DEVICE_ID=5530475707428751215
     volumes:
       - proxitok-cache:/cache
     depends_on:
-      - redis
-      - chromedriver
+      proxitok_redis:
+        condition: service_started
     networks:
-      - proxitok
-    security_opt:
-      - no-new-privileges:true
-    cap_drop:
-      - ALL
-    cap_add:
-      - CHOWN
-      - SETGID
-      - SETUID
-  # Redis, used for caching
-  redis:
-    container_name: proxitok-redis
-    image: docker.io/library/redis:7.4-alpine
+      - nginx-proxy-manager_default
+      - proxitok_internal
+
+  proxitok_redis:
+    image: redis:7-alpine
+    container_name: proxitok_redis
     restart: unless-stopped
-    labels:
-      - "io.containers.autoupdate=registry"
+    command: redis-server --save 60 1 --loglevel warning
     networks:
-      - proxitok
-    init: true
-    user: nobody
-    read_only: true
-    security_opt:
-      - no-new-privileges:true
-    cap_drop:
-      - ALL
-  # Chromedriver instance, used for sending requests to TikTok
-  chromedriver:
-    container_name: proxitok-chromedriver
-    image: zenika/alpine-chrome:with-chromedriver
-    init: true
-    labels:
-      - "io.containers.autoupdate=registry"
-    shm_size: 1g
-    networks:
-      - proxitok
-    security_opt:
-      - seccomp:./misc/setup/docker/chrome.json
+      - proxitok_internal
+
 volumes:
   proxitok-cache:
 
 networks:
-  proxitok:
+  nginx-proxy-manager_default:
+    external: true
+  proxitok_internal:

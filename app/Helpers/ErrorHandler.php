@@ -35,21 +35,32 @@ class ErrorHandler {
 
     public static function showUnavailable(string $context) {
         http_response_code(404);
-        if ($context === 'video') {
-            $tpl = new UnavailableTemplate(
-                'Este video no está disponible actualmente',
-                '¿Buscas vídeos? Prueba a buscar por autores, hashtags y sonidos en tendencia.',
-                'video',
-                'Volver al inicio'
-            );
-        } else {
-            $tpl = new UnavailableTemplate(
-                'No se pudo encontrar esta cuenta',
-                '¿Buscas vídeos? Prueba a buscar por autores, hashtags y sonidos en tendencia.',
-                'user',
-                'Volver al inicio'
-            );
+        switch ($context) {
+            case 'video':
+                $tpl = new UnavailableTemplate(
+                    'Este video no está disponible actualmente',
+                    '¿Buscas vídeos? Prueba a buscar por autores, hashtags y sonidos en tendencia.',
+                    'video',
+                    'Volver al inicio'
+                );
+                break;
+            case 'discover':
+                $tpl = new UnavailableTemplate(
+                    'No se encontraron resultados',
+                    'Prueba con otra palabra o revisa la ortografía.',
+                    'search',
+                    'Volver al inicio'
+                );
+                break;
+            default:
+                $tpl = new UnavailableTemplate(
+                    'No se pudo encontrar esta cuenta',
+                    '¿Buscas vídeos? Prueba a buscar por autores, hashtags y sonidos en tendencia.',
+                    'user',
+                    'Volver al inicio'
+                );
         }
+        Wrappers::latte('unavailable', $tpl);
         Wrappers::latte('unavailable', $tpl);
     }
 }

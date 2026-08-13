@@ -1,0 +1,21 @@
+{layout '../layouts/default.latte'}
+
+{var $has_rss = false}
+
+{block header}
+	<p class="title">Discover</p>
+	<p class="subtitle">Vídeos relacionados con «{$title}»</p>
+{/block}
+
+{block content}
+	{include '../components/feed.latte'}
+	<p class="has-text-centered has-text-grey mt-5" style="font-size:.9rem;">
+		Se muestra una única tanda de resultados. TikTok solo permite paginar la búsqueda con una sesión iniciada, algo que esta instancia evita a propósito por privacidad.
+	</p>
+{/block}
+
+{block extra}
+	{* El feed comparte controls.latte con el resto de secciones; aquí, y solo aquí,
+	   ocultamos la botonera de paginación porque discover no pagina. *}
+	<style>.buttons { display: none !important; }</style>
+{/block}

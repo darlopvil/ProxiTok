@@ -75,6 +75,9 @@ $router->mount('/tag/([^/]+)', function () use ($router) {
 
 $router->get('/music/([^/]+)', 'MusicController@get');
 
+// Discover: búsqueda de vídeos por palabra clave (landing SEO /discover/ de TikTok)
+$router->get('/discover/([^/]+)', 'DiscoverController@get');
+
 // For you
 $router->mount('/foryou', function () use ($router) {
     $router->get('/', 'ForYouController@get');

@@ -44,6 +44,7 @@ Así que una instancia completa son **tres contenedores**: ProxiTok + el firmado
 - Audio original reproducible en los feeds
 - Feeds RSS para usuarios y tags (añade `/rss`)
 - Temas
+- **Discover** (`/discover/<palabra>`): búsqueda de vídeos por término, funcionando con cualquier palabra (no solo los términos que TikTok promociona en su landing SEO). Reutiliza la plantilla de feed.
 
 ## Self-hosting
 
@@ -80,6 +81,7 @@ Pattern type:    Regular Expression
 - ✅ Página propia del vídeo (vía API `/item/detail/`)
 - ⚠️ Los posts de fotos/carrusel del feed de un perfil intentan reproducirse como vídeo; los vídeos normales van todos
 - ⚠️ El listado de un perfil grande tarda 1-2 s la primera carga (yt-dlp lista; luego cachea)
+- **Discover no pagina.** El endpoint de búsqueda web (`/search/item/full/`) solo sirve una tanda fiable (~15-20 vídeos) en modo anónimo. La página 2 exige una sesión iniciada con estado (cookies de login), que este fork evita a propósito por privacidad. Se muestra la primera tanda y se oculta el botón de paginación solo en esta vista.
 
 ## Créditos
 

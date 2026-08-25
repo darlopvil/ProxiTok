@@ -45,6 +45,7 @@ Así que una instancia completa son **tres contenedores**: ProxiTok + el firmado
 - Feeds RSS para usuarios y tags (añade `/rss`)
 - Temas
 - **Discover** (`/discover/<palabra>`): búsqueda de vídeos por término, funcionando con cualquier palabra (no solo los términos que TikTok promociona en su landing SEO). Reutiliza la plantilla de feed.
+- **Comentarios**: el icono de comentarios los despliega bajo el vídeo sin recargar la página, con respuestas anidadas ("Ver las N respuestas"), paginación de 20 en 20, e imágenes, GIFs y stickers animados.
 
 ## Self-hosting
 
@@ -82,6 +83,7 @@ Pattern type:    Regular Expression
 - ⚠️ Los posts de fotos/carrusel del feed de un perfil intentan reproducirse como vídeo; los vídeos normales van todos
 - ⚠️ El listado de un perfil grande tarda 1-2 s la primera carga (yt-dlp lista; luego cachea)
 - **Discover no pagina.** El endpoint de búsqueda web (`/search/item/full/`) solo sirve una tanda fiable (~15-20 vídeos) en modo anónimo. La página 2 exige una sesión iniciada con estado (cookies de login), que este fork evita a propósito por privacidad. Se muestra la primera tanda y se oculta el botón de paginación solo en esta vista.
+- **Portadas ausentes.** TikTok no sirve miniatura para algunos vídeos (todos los campos de cover vienen vacíos). En esos casos se usa `preload="metadata"` para que el navegador pinte el primer fotograma. En el RSS esto no funciona: los lectores no precargan el media, así que esos vídeos aparecen sin miniatura. Generarla server-side exigiría ffmpeg y se ha descartado.
 
 ## Créditos
 

@@ -36,7 +36,11 @@
 							<p n:ifcontent>{render_desc($item->desc, $item->textExtra ?? [])|noescape}</p>
                             {include '../components/themes/common/audio.latte', songTitle: $item->music->title, src: url_music($item)}
 							{include '../components/themes/common/stats.latte', playCount: $item->stats->playCount, diggCount: $item->stats->diggCount, commentCount: $item->stats->commentCount, shareCount: $item->stats->shareCount, withComments: true}
-							<div id="comments" data-url="{path('/api/comments/' . $item->id)}"></div>
+							
+						</div>
+  				</div>
+				</article>
+				<div id="comments" data-url="{path('/api/comments/' . $item->id)}"></div>
 							<div class="has-text-centered">
 								{include '../components/themes/common/share.latte', uniqueId: $info->detail->uniqueId, id: $item->id}
 								{if isset($item->video->playAddr) && $item->video->playAddr !== ""}
@@ -44,9 +48,6 @@
 								{include '../components/themes/common/download.latte', playAddr: $item->video->playAddr, id: $item->id, uniqueId: $info->detail->uniqueId}
 								{/if}
 							</div>
-						</div>
-  				</div>
-				</article>
 			</div>
 			
 		</div>

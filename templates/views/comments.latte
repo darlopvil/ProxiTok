@@ -16,6 +16,7 @@
 					{$c->text}
 				</p>
 			</div>
+            {include '../components/comment-images.latte', c: $c}
 			<p>{include '../components/icon.latte', icon: 'heart', text: number($c->digg_count)}</p>
 		</div>
 	</article>
@@ -42,6 +43,7 @@
 						<br>
 						{$c->text}
 					</p>
+                {include '../components/comment-images.latte', c: $c}
 				</div>
 				<p>{include '../components/icon.latte', icon: 'heart', text: number($c->digg_count)}</p>
 
@@ -64,6 +66,7 @@
                                     <small title="{date('M d, Y H:i:s e', $r->create_time)}">{date('M d, Y', $r->create_time)}</small>
 									<br>
 									{$r->text}
+                                {include '../components/comment-images.latte', c: $r}
 								</p>
 							</div>
                             <p>{include '../components/icon.latte', icon: 'heart', text: number($r->digg_count)}</p>

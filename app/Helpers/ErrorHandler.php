@@ -55,12 +55,11 @@ class ErrorHandler {
             default:
                 $tpl = new UnavailableTemplate(
                     'No se pudo encontrar esta cuenta',
-                    '¿Buscas vídeos? Prueba a buscar por autores, hashtags y sonidos en tendencia.',
+                    'Puede que sea privada, haya cambiado de nombre o ya no exista.',
                     'user',
                     'Volver al inicio'
                 );
         }
-        Wrappers::latte('unavailable', $tpl);
         Wrappers::latte('unavailable', $tpl);
     }
 }

@@ -1,0 +1,39 @@
+{if !empty($c->image_list)}
+<p class="mt-1">
+	{foreach $c->image_list as $img}
+		{* Las URLs .image pueden servirse como HEIC, que el navegador no pinta.
+		   Se prefiere siempre la variante .jpeg del url_list. *}
+		{var $thumb = ''}
+		{foreach ($img->crop_url->url_list ?? []) as $u}
+			{if $thumb === '' && (str_contains($u, '.jpeg') || str_contains($u, '.jpg'))}{var $thumb = $u}{/if}
+		{/foreach}
+		{if $thumb === ''}{var $thumb = $img->crop_url->url_list[0] ?? ''}{/if}
+
+		{var $full = ''}
+		{foreach ($img->origin_url->url_list ?? []) as $u}
+			{if $full === '' && (str_contains($u, '.jpeg') || str_contains($u, '.jpg'))}{var $full = $u}{/if}
+		{/foreach}
+		{if $full === ''}{var $full = $img->origin_url->url_list[0] ?? $thumb}{/if}
+
+		{if $thumb}
+		<a href="{url_stream($full)}" target="_blank" rel="noopener">
+			<img src="{url_stream($thumb)}" alt="" style="max-width:180px;max-height:180px;border-radius:6px;" />
+		</a>
+		{/if}
+	{/foreach}
+</p>
+{/if}
+
+{var $sticker = $c->cmt_sticker_struct ?? null}
+{if $sticker}
+	{var $stickerUrl = $sticker->animated_url->high_resolution_url->url_list[0]
+		?? ($sticker->animated_url->low_resolution_url->url_list[0]
+		?? ($sticker->animated_url->url_list[0]
+		?? ($sticker->static_url->high_resolution_url->url_list[0]
+		?? ($sticker->static_url->url_list[0] ?? ''))))}
+	{if $stickerUrl}
+	<p class="mt-1">
+		<img src="{url_stream($stickerUrl)}" alt="" style="max-width:160px;max-height:160px;" />
+	</p>
+	{/if}
+{/if}

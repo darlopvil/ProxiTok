@@ -1,7 +1,16 @@
 {if !isset($item->imagePost)}
-<video controls n:attr="autoplay => $isAutoplay" poster="{url_stream($item->video->originCover)}" preload="none">
+{var $cover = $item->video->originCover ?: ($item->video->cover ?: ($item->video->dynamicCover ?: ''))}
+{if isset($isSimple)}
+	{* RSS: player incrustado con preload=metadata (con "none" los lectores no
+	   llegan a cargar nada y el play no dispara). Enlace al post como respaldo. *}
+	<video controls preload="metadata" n:attr="poster => $cover ? url_stream($cover) : null">
+		<source src="{url_video_stream($item->author->uniqueId, $item->id)}" type="video/mp4" />
+	</video>
+{else}
+<video controls n:attr="autoplay => $isAutoplay, poster => $cover ? url_stream($cover) : null, preload => $cover ? 'none' : 'metadata'">
 	<source src="{url_video_stream($item->author->uniqueId, $item->id)}" type="video/mp4" />
 </video>
+{/if}
 {else}
 {if isset($isSimple)}
 	{foreach $item->imagePost->images as $i => $image}

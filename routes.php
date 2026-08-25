@@ -96,3 +96,7 @@ $router->mount('/settings', function () use ($router) {
 
 // -- EMBED -- //
 $router->get('/embed/v2/(\d+)', 'EmbedController@v2');
+
+// Comentarios (fragmentos HTML para AJAX)
+$router->get('/api/comments/([0-9]+)/replies/([0-9]+)', 'CommentsController@replies');
+$router->get('/api/comments/([0-9]+)', 'CommentsController@get');

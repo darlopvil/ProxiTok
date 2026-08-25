@@ -1,6 +1,6 @@
 <p>
 	{include '../../icon.latte', icon: 'eye', text: number($playCount)}
 	{include '../../icon.latte', icon: 'heart', text: number($diggCount)}
-	{include '../../icon.latte', icon: 'comment', text: number($commentCount)}
+	{if isset($withComments)}<a id="comments-toggle" href="#">{include '../../icon.latte', icon: 'comment', text: number($commentCount)}</a>{else}{include '../../icon.latte', icon: 'comment', text: number($commentCount)}{/if}
 	{include '../../icon.latte', icon: 'share', text: number($shareCount)}
 </p>

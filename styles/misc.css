@@ -1,3 +1,10 @@
 .new-line {
 	white-space: pre-wrap;
 }
+
+/* El tamaño del player dependía del poster; sin él, el <video> toma su tamaño
+   intrínseco (1080x1920) y se desborda. Se acota explícitamente. */
+video {
+	max-width: 100%;
+	max-height: 80vh;
+}

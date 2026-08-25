@@ -1,0 +1,91 @@
+{if $isReplies}
+	{foreach $comments as $c}
+	<article class="media">
+		<figure class="media-left">
+			<p class="image is-32x32">
+				<img n:if="isset($c->user->avatar_thumb->url_list[0])" src="{url_stream($c->user->avatar_thumb->url_list[0])}" />
+			</p>
+		</figure>
+		<div class="media-content">
+			<div class="content">
+				<p>
+					<strong>{$c->user->nickname}</strong>
+					<small><a href="{url_user($c->user->unique_id)}">@{$c->user->unique_id}</a></small>
+					<small title="{date('M d, Y H:i:s e', $c->create_time)}">{date('M d, Y', $c->create_time)}</small>
+					<br>
+					{$c->text}
+				</p>
+			</div>
+			<p>{include '../components/icon.latte', icon: 'heart', text: number($c->digg_count)}</p>
+		</div>
+	</article>
+	{/foreach}
+{else}
+	<div class="box">
+		<p class="is-size-5 has-text-centered">Comentarios ({number($total)})</p>
+		{if count($comments) === 0}
+		<p class="has-text-grey has-text-centered">No hay comentarios.</p>
+		{/if}
+		{foreach $comments as $c}
+		<article class="media">
+			<figure class="media-left">
+				<p class="image is-48x48">
+					<img n:if="isset($c->user->avatar_thumb->url_list[0])" src="{url_stream($c->user->avatar_thumb->url_list[0])}" />
+				</p>
+			</figure>
+			<div class="media-content">
+				<div class="content">
+					<p>
+						<strong>{$c->user->nickname}</strong>
+						<small><a href="{url_user($c->user->unique_id)}">@{$c->user->unique_id}</a></small>
+						<small title="{date('M d, Y H:i:s e', $c->create_time)}">{date('M d, Y', $c->create_time)}</small>
+						<br>
+						{$c->text}
+					</p>
+				</div>
+				<p>{include '../components/icon.latte', icon: 'heart', text: number($c->digg_count)}</p>
+
+				{var $preview = $c->reply_comment ?? []}
+				{var $nReplies = (int) ($c->reply_comment_total ?? 0)}
+				{if $nReplies > 0}
+				<div class="ml-4" id="replies-{$c->cid}">
+					{foreach $preview as $r}
+					<article class="media">
+						<figure class="media-left">
+							<p class="image is-32x32">
+								<img n:if="isset($r->user->avatar_thumb->url_list[0])" src="{url_stream($r->user->avatar_thumb->url_list[0])}" />
+							</p>
+						</figure>
+						<div class="media-content">
+							<div class="content">
+								<p>
+									<strong>{$r->user->nickname}</strong>
+									<small><a href="{url_user($r->user->unique_id)}">@{$r->user->unique_id}</a></small>
+                                    <small title="{date('M d, Y H:i:s e', $r->create_time)}">{date('M d, Y', $r->create_time)}</small>
+									<br>
+									{$r->text}
+								</p>
+							</div>
+                            <p>{include '../components/icon.latte', icon: 'heart', text: number($r->digg_count)}</p>
+						</div>
+					</article>
+					{/foreach}
+					{if $nReplies > count($preview)}
+					<a class="is-size-7" data-replies="{$c->cid}" href="{path('/api/comments/' . $awemeId . '/replies/' . $c->cid)}">Ver las {number($nReplies)} respuestas</a>
+					{/if}
+				</div>
+				{/if}
+			</div>
+		</article>
+		{/foreach}
+
+		<div class="buttons is-centered">
+			{if $cursor > 0}
+			<a class="button is-small" data-page href="{path('/api/comments/' . $awemeId)}?cursor={max(0, $cursor - 20)}">Anteriores</a>
+			{/if}
+			{if $hasMore}
+			<a class="button is-small is-success" data-page href="{path('/api/comments/' . $awemeId)}?cursor={$cursor + 20}">Siguientes</a>
+			{/if}
+		</div>
+	</div>
+{/if}

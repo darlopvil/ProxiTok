@@ -12,7 +12,7 @@ class Wrappers {
     /**
      * Setup of Latte template engine
      */
-    public static function latte(string $template, BaseTemplate $base) {
+    public static function latte(string $template, BaseTemplate $base, bool $return = false): ?string {
         $latte = new \Latte\Engine;
         $cache_path = Misc::env('LATTE_CACHE', __DIR__ . '/../../cache/latte');
         $latte->setTempDirectory($cache_path);
@@ -131,7 +131,11 @@ class Wrappers {
             return $out;
         });
 
+        if ($return) {
+            return $latte->renderToString(Misc::getView($template), $base);
+        }
         $latte->render(Misc::getView($template), $base);
+        return null;
     }
 
     /**

@@ -62,6 +62,9 @@ $router->get('/redirect/download', 'RedirectController@download');
 $router->mount('/@([^/]+)', function () use ($router) {
     $router->get('/', 'UserController@get');
     $router->get('/video/(\w+)', 'UserController@video');
+    // Posts de imágenes (carrusel/slideshow): TikTok usa /photo/ en vez de /video/,
+    // pero es el mismo aweme id y el mismo endpoint de detalle.
+    $router->get('/photo/(\w+)', 'UserController@video');
     $router->get('/rss', 'UserController@rss');
 });
 

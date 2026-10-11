@@ -1,7 +1,7 @@
 {layout "../layouts/{$layout}.latte"}
 
 {var $og = $info->meta->og}
-{var $og_content = $item->video->originCover}
+{var $og_content = ($item->video->originCover ?? '') ?: ($item->imagePost->images[0]->imageURL->urlList[0] ?? '')}
 {var $og_url = url_video_internal($info->detail->uniqueId, $item->id)}
 
 {if !empty($item->desc)}

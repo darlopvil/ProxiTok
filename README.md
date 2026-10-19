@@ -46,6 +46,7 @@ Así que una instancia completa son **tres contenedores**: ProxiTok + el firmado
 - Temas
 - **Discover** (`/discover/<palabra>`): búsqueda de vídeos por término, funcionando con cualquier palabra (no solo los términos que TikTok promociona en su landing SEO). Reutiliza la plantilla de feed.
 - **Comentarios**: el icono de comentarios los despliega bajo el vídeo sin recargar la página, con respuestas anidadas ("Ver las N respuestas"), paginación de 20 en 20, e imágenes, GIFs y stickers animados.
+- **Modo embed** (`/embed/v2/<id>`): pensado para incrustar vídeos en otras webs mediante iframe. Muestra solo el reproductor ocupando el iframe entero, sin autoplay (varios embeds en la misma página no suenan a la vez) y sin la caja de detalles. Si el vídeo ya no existe, sale la página limpia de "no disponible".
 
 ## Self-hosting
 
@@ -80,6 +81,7 @@ Pattern type:    Regular Expression
 - ✅ Reproducción y descarga de vídeo (con / sin marca de agua)
 - ✅ Audio original en los feeds
 - ✅ Página propia del vídeo (vía API `/item/detail/`)
+- ✅ Enlaces de posts de imágenes (`/@usuario/photo/<id>`), que se muestran como carrusel
 - ⚠️ Los posts de fotos/carrusel del feed de un perfil intentan reproducirse como vídeo; los vídeos normales van todos
 - ⚠️ El listado de un perfil grande tarda 1-2 s la primera carga (yt-dlp lista; luego cachea)
 - **Discover no pagina.** El endpoint de búsqueda web (`/search/item/full/`) solo sirve una tanda fiable (~15-20 vídeos) en modo anónimo. La página 2 exige una sesión iniciada con estado (cookies de login), que este fork evita a propósito por privacidad. Se muestra la primera tanda y se oculta el botón de paginación solo en esta vista.

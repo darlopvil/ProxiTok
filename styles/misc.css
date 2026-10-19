@@ -8,3 +8,33 @@ video {
 	max-width: 100%;
 	max-height: 80vh;
 }
+/* Embed (/embed/v2/<id>): el reproductor ocupa el iframe entero. Con height:auto
+   el <video> tomaba la forma del poster (a veces cuadrado) y dejaba un hueco
+   debajo; con alto fijo y object-fit: contain se ve como un TikTok normal. */
+.embed-player {
+	position: fixed;
+	inset: 0;
+	background: #000;
+}
+
+.embed-player video {
+	display: block;
+	width: 100%;
+	height: 100%;
+	max-height: none;
+	object-fit: contain;
+}
+
+.embed-player .carousel {
+	height: 100%;
+}
+
+.embed-player .slides-item {
+	margin: 0;
+	max-height: none;
+}
+
+.embed-player .slides-item img {
+	max-height: calc(100vh - 4.5rem);
+	object-fit: contain;
+}

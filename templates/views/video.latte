@@ -9,6 +9,13 @@
 {/if}
 
 {block content}
+	{if $isEmbed}
+	{* Embed para iframes (p. ej. MeMe): solo el reproductor, sin autoplay (varios
+	   embeds en la misma página sonarían a la vez) y sin la caja de detalles. *}
+	<div class="embed-player">
+		{include '../components/themes/common/content.latte', item: $item, isAutoplay: false, isBig: true}
+	</div>
+	{else}
 	<div class="columns is-centered">
 		<div class="column has-text-centered">
 			{include '../components/themes/common/content.latte', item: $item, isAutoplay: true, isBig: true}
@@ -52,7 +59,10 @@
 			
 		</div>
 	</div>
+	{/if}
 {/block}
 {block extra}
+	{if !$isEmbed}
 	<script src="{assets('js', 'comments.js')}"></script>
+	{/if}
 {/block}

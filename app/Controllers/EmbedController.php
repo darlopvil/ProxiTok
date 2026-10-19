@@ -15,7 +15,7 @@ class EmbedController {
             $info = $video->getInfo();
             Wrappers::latte('video', new VideoTemplate($item, $info, true));
         } else {
-            ErrorHandler::showMeta($video->error());
+            ErrorHandler::showMeta($video->error(), 'video');
         }
     }
 }

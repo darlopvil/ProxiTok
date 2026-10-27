@@ -32,6 +32,7 @@ class UserController {
             $item = $video->getFeed()->items[0];
             $info = $video->getInfo();
             Wrappers::latte('video', new VideoTemplate($item, $info));
+            ProxyController::warmVideo($item);
         } else {
             ErrorHandler::showMeta($video->error(), 'video');
         }

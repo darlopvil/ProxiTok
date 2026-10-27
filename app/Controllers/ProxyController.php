@@ -42,6 +42,28 @@ class ProxyController {
         $downloader->url($url, $filename, $watermark);
     }
 
+    /**
+     * Precarga el vídeo en la caché de ttdlp DESPUÉS de haber enviado la página: yt-dlp
+     * tarda ~2 s en sacarlo en frío, y así ya está listo cuando el usuario le da al play.
+     * HEAD sobre /video: ttdlp lo descarga igual pero no devuelve el cuerpo.
+     */
+    public static function warmVideo(object $item): void {
+        $id = (string) ($item->id ?? '');
+        if (isset($item->imagePost) || ($item->video->playAddr ?? '') === '' || !preg_match('/^\d{6,25}$/', $id)) {
+            return;
+        }
+        if (function_exists('fastcgi_finish_request')) {
+            fastcgi_finish_request();
+        }
+        ignore_user_abort(true);
+        try {
+            (new \GuzzleHttp\Client(['http_errors' => false, 'timeout' => 110]))
+                ->head(self::SIDECAR . '/video?id=' . urlencode($id) . '&user=' . urlencode($item->author->uniqueId ?? ''));
+        } catch (\Throwable $e) {
+            // Solo es una precarga: si falla, el vídeo se pedirá al darle al play.
+        }
+    }
+
     // --- Vídeo vía sidecar yt-dlp ---
     public static function videoStream() {
         self::proxySidecar('/video');

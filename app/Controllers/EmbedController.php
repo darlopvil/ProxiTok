@@ -14,6 +14,7 @@ class EmbedController {
             $item = $video->getFeed()->items[0];
             $info = $video->getInfo();
             Wrappers::latte('video', new VideoTemplate($item, $info, true));
+            ProxiController::warmVideo($item);
         } else {
             ErrorHandler::showMeta($video->error(), 'video');
         }

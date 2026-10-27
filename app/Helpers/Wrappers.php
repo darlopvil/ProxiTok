@@ -10,6 +10,27 @@ use App\Models\BaseTemplate;
 
 class Wrappers {
     /**
+     * #hashtag: el lookbehind evita casar dentro de palabras o de entidades HTML (&#039;),
+     * pero admite otro # delante (##gamedev); el token acaba en espacio, otro #/@ o un
+     * carácter que rompería el href.
+     */
+    private const HASHTAG = '/(?<![\p{L}\p{N}_&])#([^\s#@<>&"\'\/?]+)/u';
+
+    /** Separa la puntuación final ("#ps2," → ["ps2", ","]), que no forma parte del hashtag. */
+    private static function splitTrail(string $s): array {
+        preg_match('/^(.*?)([.,;:!)\]}]*)$/su', $s, $p);
+        return [$p[1], $p[2]];
+    }
+
+    /** Escapa un trozo de texto y enlaza sus hashtags. */
+    private static function linkHashtags(string $text): string {
+        return preg_replace_callback(self::HASHTAG, function ($m) {
+            [$name, $trail] = self::splitTrail($m[1]);
+            if ($name === '') return $m[0];
+            return '<a href="' . UrlBuilder::tag($name) . '">#' . $name . '</a>' . $trail;
+        }, htmlspecialchars($text));
+    }
+    /**
      * Setup of Latte template engine
      */
     public static function latte(string $template, BaseTemplate $base, bool $return = false): ?string {
@@ -107,28 +128,42 @@ class Wrappers {
             return $cond ? 'yes' : 'no';
         });
 
-        // Add URLs to video descriptions
+        // Descripción enlazada:
+        // - #hashtags detectados en el propio texto (los feeds de perfil de ttdlp no traen
+        //   textExtra), emojis incluidos (#indonesia🇮🇩).
+        // - @menciones por las posiciones de textExtra (en unidades UTF-16): TikTok escribe en
+        //   el texto el NOMBRE visible (@🔪AGGRO CRAB🦀), no el usuario, así que no se puede
+        //   casar por texto.
         $latte->addFunction('render_desc', function (string $desc, array $textExtras = []): string {
-            $out = htmlspecialchars($desc);
-            foreach ($textExtras as $extra) {
-                $token = null;
-                $url   = '';
-                if (isset($extra->hashtagName) && $extra->hashtagName !== '') {
-                    $token = '#' . $extra->hashtagName;
-                    $url   = UrlBuilder::tag($extra->hashtagName);
-                } elseif (isset($extra->userUniqueId) && $extra->userUniqueId !== '') {
-                    $token = '@' . $extra->userUniqueId;
-                    $url   = UrlBuilder::user($extra->userUniqueId);
-                }
-                if ($token === null) continue;
-
-                // Token literal, insensible a mayúsculas, UNA sola vez, sin offsets UTF-16.
-                $pattern = '/' . preg_quote(htmlspecialchars($token), '/') . '\b/iu';
-                $out = preg_replace_callback($pattern, function ($m) use ($url) {
-                    return '<a href="' . $url . '">' . $m[0] . '</a>';
-                }, $out, 1);
+            $u16 = mb_convert_encoding($desc, 'UTF-16LE', 'UTF-8');
+            $len = intdiv(strlen($u16), 2);
+            $spans = [];
+            foreach ($textExtras as $e) {
+                if (empty($e->userUniqueId) || !isset($e->start, $e->end)) continue;
+                $start = (int) $e->start; $end = (int) $e->end;
+                if ($start >= 0 && $start < $end && $end <= $len) $spans[] = [$start, $end, $e->userUniqueId];
             }
-            return $out;
+            usort($spans, fn($x, $y) => $x[0] <=> $y[0]);
+
+            $piece = fn(int $from, int $to) => mb_convert_encoding(substr($u16, $from * 2, ($to - $from) * 2), 'UTF-8', 'UTF-16LE');
+            $out = ''; $pos = 0;
+            foreach ($spans as [$start, $end, $user]) {
+                if ($start < $pos) continue; // solapada con la anterior
+                $out .= self::linkHashtags($piece($pos, $start));
+                $out .= '<a href="' . UrlBuilder::user($user) . '">' . htmlspecialchars($piece($start, $end)) . '</a>';
+                $pos = $end;
+            }
+            return $out . self::linkHashtags($piece($pos, $len));
+        });
+
+        // Hashtags del vídeo que NO aparecen ya en la descripción (allí ya van enlazados).
+        $latte->addFunction('extra_challenges', function (array $challenges, string $desc): array {
+            preg_match_all(self::HASHTAG, $desc, $m);
+            $inDesc = [];
+            foreach ($m[1] as $t) $inDesc[mb_strtolower(self::splitTrail($t)[0])] = true;
+            return array_values(array_filter($challenges, function ($c) use ($inDesc) {
+                return isset($c->title) && $c->title !== '' && !isset($inDesc[mb_strtolower($c->title)]);
+            }));
         });
 
         if ($return) {

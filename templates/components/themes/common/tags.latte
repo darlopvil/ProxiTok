@@ -1,8 +1,10 @@
-<details>
-	<summary>{include '../../icon.latte', icon: 'tag', text: 'Tags used'}</summary>
-	<div class="tags">
-		{foreach $challenges as $challenge}
-			<a class="tag is-primary is-rounded" href="{path('/tag/' . $challenge->title)}">#{$challenge->title}</a>
-		{/foreach}
-	</div>
-</details>
+{* Solo los hashtags que no aparecen ya en la descripción: los que sí están
+   salen enlazados en el propio texto y repetirlos aquí era redundante. *}
+{var $extra = extra_challenges($challenges, $desc ?? '')}
+{if $extra}
+<div class="tags mb-1">
+	{foreach $extra as $challenge}
+		<a class="tag is-primary is-rounded" href="{path('/tag/' . $challenge->title)}">#{$challenge->title}</a>
+	{/foreach}
+</div>
+{/if}

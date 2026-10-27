@@ -21,7 +21,7 @@
 				<small title="{date('M d, Y H:i:s e', $item->createTime)}">{date('M d, Y', $item->createTime)}</small>
       </p>
 			{if !empty($item->challenges)}
-			{include './common/tags.latte', challenges: $item->challenges}
+			{include './common/tags.latte', challenges: $item->challenges, desc: $item->desc}
 			{/if}
 			<p class="mb-2 mt-2" n:ifcontent>{render_desc($item->desc, $item->textExtra ?? [])|noescape}</p>
       {include './common/audio.latte', songTitle: $item->music->title, src: url_music($item)}

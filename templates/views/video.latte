@@ -37,7 +37,7 @@
 							<small title="{date('M d, Y H:i:s e', $item->createTime)}">{date('M d, Y', $item->createTime)}</small>
   			    </p>
 						{if !empty($item->challenges)}
-						{include '../components/themes/common/tags.latte', challenges: $item->challenges}
+						{include '../components/themes/common/tags.latte', challenges: $item->challenges, desc: $item->desc}
 						{/if}
 						<div class="content">
 							<p n:ifcontent>{render_desc($item->desc, $item->textExtra ?? [])|noescape}</p>
